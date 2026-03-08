@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)file:///C:/Users/raina/Downloads/GMAT_Question_Tracker%20(1).html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GMAT Question Tracker</title>
+<link href="./GMAT_Question_Tracker (1)_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg:#080c14;--surface:#0e1424;--card:#111827;--card2:#141e30;
+    --border:#1c2a40;--border2:#243347;
+    --accent:#3b82f6;--accent2:#6366f1;
+    --text:#e2e8f0;--text2:#94a3b8;--muted:#4b6280;
+    --success:#10b981;--warn:#f59e0b;--danger:#ef4444;--expert:#a855f7;
+    --d1:#10b981;--d1b:rgba(16,185,129,.13);
+    --d2:#84cc16;--d2b:rgba(132,204,22,.13);
+    --d3:#f59e0b;--d3b:rgba(245,158,11,.13);
+    --d4:#f97316;--d4b:rgba(249,115,22,.13);
+    --d5:#ef4444;--d5b:rgba(239,68,68,.13);
+    --d6:#ec4899;--d6b:rgba(236,72,153,.13);
+    --d7:#a855f7;--d7b:rgba(168,85,247,.13);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse 70% 50% at 15% 5%,rgba(59,130,246,.06) 0%,transparent 60%),
+               radial-gradient(ellipse 50% 40% at 85% 85%,rgba(99,102,241,.05) 0%,transparent 60%);}
+  .wrapper{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:28px 20px 80px;}
+
+  header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;gap:16px;flex-wrap:wrap;}
+  .logo h1{font-family:'Space Mono',monospace;font-size:clamp(15px,2.5vw,23px);font-weight:700;letter-spacing:-.5px;
+    background:linear-gradient(135deg,#60a5fa,#818cf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .logo p{color:var(--muted);font-size:12px;margin-top:5px;}
+
+  .kpi-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center;min-width:84px;}
+  .kpi .v{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;line-height:1;}
+  .kpi .l{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px;}
+
+  .ob{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 20px;margin-bottom:20px;}
+  .ob-lbl{font-size:11px;color:var(--muted);white-space:nowrap;letter-spacing:.5px;text-transform:uppercase;}
+  .ob-bar{flex:1;height:8px;border-radius:4px;background:var(--border);overflow:hidden;min-width:100px;}
+  .ob-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#10b981,#3b82f6,#6366f1);transition:width .5s ease;}
+  .ob-pct{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;}
+
+  .legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+  .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);}
+  .leg-dot{width:7px;height:7px;border-radius:50%;}
+
+  .tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:24px;}
+  .tab{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);
+    font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.3px;white-space:nowrap;}
+  .tab:hover{border-color:var(--accent);color:var(--text);}
+  .tab.active{background:linear-gradient(135deg,#1d4ed8,#4338ca);border-color:transparent;color:#fff;box-shadow:0 4px 16px rgba(59,130,246,.28);}
+  .tab.sw-tab.active{background:linear-gradient(135deg,#065f46,#064e3b);box-shadow:0 4px 16px rgba(16,185,129,.25);}
+
+  .panel{display:none;}
+  .panel.active{display:block;animation:fadeUp .3s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  .sec-title{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+    color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  .tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+    box-shadow:0 8px 32px rgba(0,0,0,.35);overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;min-width:960px;}
+
+  thead th{padding:12px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;
+    border-bottom:1px solid var(--border);text-align:center;white-space:nowrap;}
+  th.tc{text-align:left;padding-left:18px;color:var(--muted);min-width:210px;}
+  .th-d1{color:var(--d1);background:var(--d1b);}
+  .th-d2{color:var(--d2);background:var(--d2b);}
+  .th-d3{color:var(--d3);background:var(--d3b);}
+  .th-d4{color:var(--d4);background:var(--d4b);}
+  .th-d5{color:var(--d5);background:var(--d5b);}
+  .th-d6{color:var(--d6);background:var(--d6b);}
+  .th-d7{color:var(--d7);background:var(--d7b);}
+  .th-tot{color:var(--accent);background:rgba(59,130,246,.09);}
+  .th-cor{color:var(--success);background:rgba(16,185,129,.09);}
+  .th-inc{color:var(--danger);background:rgba(239,68,68,.09);}
+  .th-acc{color:var(--warn);background:rgba(245,158,11,.09);}
+  .th-prg{color:var(--muted);}
+
+  tbody tr{transition:background .12s;}
+  tbody tr:hover{background:rgba(255,255,255,.025);}
+  tbody tr:not(:last-child) td{border-bottom:1px solid rgba(255,255,255,.035);}
+  td{padding:0;text-align:center;vertical-align:middle;}
+  td.tn{text-align:left;padding:11px 10px 11px 18px;font-size:13px;color:var(--text);font-weight:500;}
+
+  td.dc input[type=number]{width:100%;height:42px;background:transparent;border:none;outline:none;
+    color:var(--text2);font-family:'Space Mono',monospace;font-size:12px;text-align:center;cursor:pointer;
+    -moz-appearance:textfield;transition:background .15s,color .15s;}
+  td.dc input::-webkit-inner-spin-button,td.dc input::-webkit-outer-spin-button{-webkit-appearance:none;}
+  td.dc input:focus{background:rgba(59,130,246,.09);color:#93c5fd;}
+  td.dc input.hv{color:#60a5fa;font-weight:700;}
+
+  td.cc input[type=number]{width:100%;height:42px;background:transparent;border:none;outline:none;
+    color:var(--success);font-family:'Space Mono',monospace;font-size:12px;text-align:center;cursor:pointer;-moz-appearance:textfield;}
+  td.ic input[type=number]{width:100%;height:42px;background:transparent;border:none;outline:none;
+    color:var(--danger);font-family:'Space Mono',monospace;font-size:12px;text-align:center;cursor:pointer;-moz-appearance:textfield;}
+  td.cc input::-webkit-inner-spin-button,td.cc input::-webkit-outer-spin-button,
+  td.ic input::-webkit-inner-spin-button,td.ic input::-webkit-outer-spin-button{-webkit-appearance:none;}
+  td.cc input:focus{background:rgba(16,185,129,.09);}
+  td.ic input:focus{background:rgba(239,68,68,.09);}
+
+  td.totc{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--accent);padding:11px 8px;}
+  td.accc{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;padding:11px 8px;}
+
+  td.prgc{padding:0 12px;min-width:88px;}
+  .pb{height:5px;border-radius:3px;background:var(--border);overflow:hidden;}
+  .pf{height:100%;border-radius:3px;background:linear-gradient(90deg,#3b82f6,#6366f1);transition:width .4s ease;}
+  .pp{font-size:10px;font-family:'Space Mono',monospace;color:var(--muted);margin-top:3px;text-align:right;}
+
+  tfoot td{padding:11px 8px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+    color:var(--accent2);background:rgba(99,102,241,.07);border-top:1px solid var(--border);text-align:center;}
+  tfoot td.tn{text-align:left;padding-left:18px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+
+  /* ── SW Tab ── */
+  .sw-note{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:10px;
+    padding:14px 18px;margin-bottom:20px;font-size:12px;color:var(--text2);line-height:1.7;}
+  .sw-note strong{color:var(--accent);}
+
+  .sw-summary{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px;}
+  .sw-summary h3{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:16px;font-family:'Space Mono',monospace;}
+  .sw-bars{display:flex;flex-direction:column;gap:13px;}
+  .sw-br{display:flex;align-items:center;gap:12px;}
+  .sw-bl{font-size:12px;color:var(--text2);width:170px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sw-bt{flex:1;height:8px;border-radius:4px;background:var(--border);overflow:hidden;}
+  .sw-bf{height:100%;border-radius:4px;transition:width .5s ease;}
+  .sw-bp{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;width:38px;text-align:right;flex-shrink:0;}
+
+  .sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+  @media(max-width:680px){.sw-grid{grid-template-columns:1fr;}}
+  .sw-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.25);}
+  .sw-hd{padding:13px 18px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    display:flex;align-items:center;gap:8px;}
+  .sw-hd.str{background:rgba(16,185,129,.12);color:var(--success);border-bottom:1px solid rgba(16,185,129,.15);}
+  .sw-hd.wk{background:rgba(239,68,68,.12);color:var(--danger);border-bottom:1px solid rgba(239,68,68,.15);}
+  .sw-hd.med{background:rgba(245,158,11,.1);color:var(--warn);border-bottom:1px solid rgba(245,158,11,.15);}
+  .sw-hd.none{background:rgba(75,98,128,.12);color:var(--muted);border-bottom:1px solid var(--border);}
+  .sw-hd .hd-dot{width:7px;height:7px;border-radius:50%;}
+  .sw-list{padding:8px 0;}
+  .sw-item{display:flex;align-items:center;justify-content:space-between;padding:9px 18px;transition:background .12s;gap:10px;}
+  .sw-item:hover{background:rgba(255,255,255,.025);}
+  .si-l{display:flex;flex-direction:column;gap:2px;}
+  .si-name{font-size:13px;font-weight:500;color:var(--text);}
+  .si-sec{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+  .si-r{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .si-cnt{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;}
+  .si-badge{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;white-space:nowrap;}
+  .si-badge.str{background:rgba(16,185,129,.15);color:var(--success);}
+  .si-badge.wk{background:rgba(239,68,68,.15);color:var(--danger);}
+  .si-badge.med{background:rgba(245,158,11,.15);color:var(--warn);}
+  .sw-empty{padding:28px 18px;text-align:center;color:var(--muted);font-size:13px;font-style:italic;line-height:1.7;}
+  .sw-tags{display:flex;flex-wrap:wrap;gap:6px;padding:14px 18px;}
+  .sw-tag{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="logo">
+      <h1>GMAT QUESTION TRACKER</h1>
+      <p>Track attempts, accuracy &amp; progress across all sections &amp; difficulty levels</p>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="v" id="k-att" style="color:var(--accent)">200</div><div class="l">Attempted</div></div>
+      <div class="kpi"><div class="v" id="k-cor" style="color:var(--success)">93</div><div class="l">Correct</div></div>
+      <div class="kpi"><div class="v" id="k-acc" style="color:var(--warn)">93%</div><div class="l">Accuracy</div></div>
+      <div class="kpi"><div class="v" id="k-top" style="color:var(--accent2)">2</div><div class="l">Topics</div></div>
+    </div>
+  </header>
+
+  <div class="ob">
+    <span class="ob-lbl">Overall Coverage</span>
+    <div class="ob-bar"><div class="ob-fill" id="ob-fill" style="width: 6%;"></div></div>
+    <span class="ob-pct" id="ob-pct">6%</span>
+  </div>
+
+  <div class="legend">
+    <span class="leg"><span class="leg-dot" style="background:var(--d1)"></span>Sub-505</span>
+    <span class="leg"><span class="leg-dot" style="background:var(--d2)"></span>505–555</span>
+    <span class="leg"><span class="leg-dot" style="background:var(--d3)"></span>555–605</span>
+    <span class="leg"><span class="leg-dot" style="background:var(--d4)"></span>605–655</span>
+    <span class="leg"><span class="leg-dot" style="background:var(--d5)"></span>655–705</span>
+    <span class="leg"><span class="leg-dot" style="background:var(--d6)"></span>705–805</span>
+    <span class="leg"><span class="leg-dot" style="background:var(--d7)"></span>805+ Expert</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab" onclick="switchTab(&#39;CR&#39;,this)">CR · Critical Reasoning</button>
+    <button class="tab" onclick="switchTab(&#39;RC&#39;,this)">RC · Reading Comprehension</button>
+    <button class="tab active" onclick="switchTab(&#39;QT&#39;,this)">Quants</button>
+    <button class="tab" onclick="switchTab(&#39;DI&#39;,this)">DI · Data Insights</button>
+    <button class="tab sw-tab" onclick="switchTab(&#39;SW&#39;,this)">⚡ Strengths &amp; Weaknesses</button>
+  </div>
+
+  <div id="panels"><div class="panel" id="panel-CR">
+      <div class="sec-title">CR — Critical Reasoning</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th class="tc">Topic</th>
+          <th class="th-d1">Sub-505</th><th class="th-d2">505–555</th><th class="th-d3">555–605</th><th class="th-d4">605–655</th><th class="th-d5">655–705</th><th class="th-d6">705–805</th><th class="th-d7">805+</th>
+          <th class="th-tot">Total</th>
+          <th class="th-cor">Correct</th>
+          <th class="th-inc">Incorrect</th>
+          <th class="th-acc">Accuracy</th>
+          <th class="th-prg">Progress</th>
+        </tr></thead>
+        <tbody><tr>
+    <td class="tn">Assumptions</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="0" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="0" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="0" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="0" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="0" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="0" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="0" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-0">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="0" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="0" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-0" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-0" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-0">0%</div></td>
+  </tr><tr>
+    <td class="tn">Bold Face CR</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="1" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="1" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="1" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="1" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="1" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="1" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="1" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-1">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="1" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="1" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-1" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-1" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-1">0%</div></td>
+  </tr><tr>
+    <td class="tn">Complete the Passage</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="2" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="2" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="2" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="2" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="2" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="2" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="2" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-2">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="2" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="2" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-2" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-2" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-2">0%</div></td>
+  </tr><tr>
+    <td class="tn">Conclusion</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="3" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="3" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="3" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="3" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="3" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="3" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="3" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-3">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="3" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="3" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-3" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-3" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-3">0%</div></td>
+  </tr><tr>
+    <td class="tn">Evaluate an Argument</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="4" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="4" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="4" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="4" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="4" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="4" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="4" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-4">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="4" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="4" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-4" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-4" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-4">0%</div></td>
+  </tr><tr>
+    <td class="tn">Inference</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="5" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="5" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="5" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="5" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="5" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="5" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="5" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-5">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="5" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="5" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-5" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-5" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-5">0%</div></td>
+  </tr><tr>
+    <td class="tn">Logical Flaw</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="6" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="6" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="6" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="6" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="6" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="6" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="6" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-6">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="6" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="6" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-6" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-6" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-6">0%</div></td>
+  </tr><tr>
+    <td class="tn">Method of Reasoning</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="7" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="7" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="7" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="7" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="7" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="7" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="7" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-7">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="7" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="7" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-7" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-7" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-7">0%</div></td>
+  </tr><tr>
+    <td class="tn">Must Be True</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="8" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="8" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="8" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="8" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="8" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="8" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="8" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-8">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="8" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="8" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-8" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-8" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-8">0%</div></td>
+  </tr><tr>
+    <td class="tn">Resolve a Paradox</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="9" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="9" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="9" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="9" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="9" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="9" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="9" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-9">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="9" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="9" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-9" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-9" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-9">0%</div></td>
+  </tr><tr>
+    <td class="tn">Similar Reasoning</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="10" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="10" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="10" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="10" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="10" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="10" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="10" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-10">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="10" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="10" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-10" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-10" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-10">0%</div></td>
+  </tr><tr>
+    <td class="tn">Strengthen Argument</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="11" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="11" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="11" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="11" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="11" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="11" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="11" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-11">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="11" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="11" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-11" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-11" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-11">0%</div></td>
+  </tr><tr>
+    <td class="tn">Weaken Argument</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="12" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="12" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="12" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="12" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="12" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="12" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="CR" data-t="12" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-CR-12">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="12" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="CR" data-t="12" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-CR-12" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-CR-12" style="width:0%"></div></div>
+      <div class="pp" id="pp-CR-12">0%</div></td>
+  </tr></tbody>
+        <tfoot><tr>
+          <td class="tn">Column Total</td>
+          <td id="ct-CR-0">0</td><td id="ct-CR-1">0</td><td id="ct-CR-2">0</td><td id="ct-CR-3">0</td><td id="ct-CR-4">0</td><td id="ct-CR-5">0</td><td id="ct-CR-6">0</td>
+          <td id="gt-CR">0</td>
+          <td id="gc-CR" style="color:var(--success)">0</td>
+          <td id="gi-CR" style="color:var(--danger)">0</td>
+          <td id="ga-CR" style="color:var(--warn)">—</td>
+          <td></td>
+        </tr></tfoot>
+      </table></div></div><div class="panel" id="panel-RC">
+      <div class="sec-title">RC — Reading Comprehension</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th class="tc">Topic</th>
+          <th class="th-d1">Sub-505</th><th class="th-d2">505–555</th><th class="th-d3">555–605</th><th class="th-d4">605–655</th><th class="th-d5">655–705</th><th class="th-d6">705–805</th><th class="th-d7">805+</th>
+          <th class="th-tot">Total</th>
+          <th class="th-cor">Correct</th>
+          <th class="th-inc">Incorrect</th>
+          <th class="th-acc">Accuracy</th>
+          <th class="th-prg">Progress</th>
+        </tr></thead>
+        <tbody><tr>
+    <td class="tn">Humanities</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="0" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="0" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="0" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="0" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="0" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="0" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="0" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-RC-0">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="0" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="0" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-RC-0" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-RC-0" style="width:0%"></div></div>
+      <div class="pp" id="pp-RC-0">0%</div></td>
+  </tr><tr>
+    <td class="tn">Science</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="1" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="1" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="1" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="1" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="1" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="1" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="1" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-RC-1">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="1" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="1" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-RC-1" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-RC-1" style="width:0%"></div></div>
+      <div class="pp" id="pp-RC-1">0%</div></td>
+  </tr><tr>
+    <td class="tn">Business</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="2" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="2" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="2" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="2" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="2" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="2" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="2" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-RC-2">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="2" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="2" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-RC-2" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-RC-2" style="width:0%"></div></div>
+      <div class="pp" id="pp-RC-2">0%</div></td>
+  </tr><tr>
+    <td class="tn">Social Science</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="3" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="3" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="3" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="3" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="3" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="3" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="3" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-RC-3">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="3" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="3" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-RC-3" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-RC-3" style="width:0%"></div></div>
+      <div class="pp" id="pp-RC-3">0%</div></td>
+  </tr><tr>
+    <td class="tn">Long Passage</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="4" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="4" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="4" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="4" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="4" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="4" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="4" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-RC-4">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="4" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="4" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-RC-4" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-RC-4" style="width:0%"></div></div>
+      <div class="pp" id="pp-RC-4">0%</div></td>
+  </tr><tr>
+    <td class="tn">Short Passage</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="5" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="5" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="5" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="5" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="5" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="5" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="RC" data-t="5" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-RC-5">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="5" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="RC" data-t="5" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-RC-5" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-RC-5" style="width:0%"></div></div>
+      <div class="pp" id="pp-RC-5">0%</div></td>
+  </tr></tbody>
+        <tfoot><tr>
+          <td class="tn">Column Total</td>
+          <td id="ct-RC-0">0</td><td id="ct-RC-1">0</td><td id="ct-RC-2">0</td><td id="ct-RC-3">0</td><td id="ct-RC-4">0</td><td id="ct-RC-5">0</td><td id="ct-RC-6">0</td>
+          <td id="gt-RC">0</td>
+          <td id="gc-RC" style="color:var(--success)">0</td>
+          <td id="gi-RC" style="color:var(--danger)">0</td>
+          <td id="ga-RC" style="color:var(--warn)">—</td>
+          <td></td>
+        </tr></tfoot>
+      </table></div></div><div class="panel active" id="panel-QT">
+      <div class="sec-title">QT — Quants</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th class="tc">Topic</th>
+          <th class="th-d1">Sub-505</th><th class="th-d2">505–555</th><th class="th-d3">555–605</th><th class="th-d4">605–655</th><th class="th-d5">655–705</th><th class="th-d6">705–805</th><th class="th-d7">805+</th>
+          <th class="th-tot">Total</th>
+          <th class="th-cor">Correct</th>
+          <th class="th-inc">Incorrect</th>
+          <th class="th-acc">Accuracy</th>
+          <th class="th-prg">Progress</th>
+        </tr></thead>
+        <tbody><tr>
+    <td class="tn">Absolute Values/Modules</td><td class="dc"><input type="number" min="0" max="999" value="0" class="hv" data-s="QT" data-t="0" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="0" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="0" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="0" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="0" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="0" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="0" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-0">100</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="0" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="0" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-0" style="color: var(--success);">93%</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-0" style="width: 100%;"></div></div>
+      <div class="pp" id="pp-QT-0">100%</div></td>
+  </tr><tr>
+    <td class="tn">Algebra</td><td class="dc"><input type="number" min="0" max="999" value="0" class="hv" data-s="QT" data-t="1" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="1" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="1" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="1" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="1" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="1" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="1" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-1">100</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="1" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="1" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-1" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-1" style="width: 100%;"></div></div>
+      <div class="pp" id="pp-QT-1">100%</div></td>
+  </tr><tr>
+    <td class="tn">Arithmetic</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="2" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="2" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="2" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="2" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="2" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="2" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="2" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-2">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="2" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="2" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-2" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-2" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-2">0%</div></td>
+  </tr><tr>
+    <td class="tn">Combinations</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="3" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="3" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="3" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="3" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="3" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="3" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="3" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-3">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="3" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="3" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-3" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-3" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-3">0%</div></td>
+  </tr><tr>
+    <td class="tn">Coordinate Geometry</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="4" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="4" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="4" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="4" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="4" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="4" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="4" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-4">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="4" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="4" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-4" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-4" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-4">0%</div></td>
+  </tr><tr>
+    <td class="tn">Distance/Rate Problems</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="5" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="5" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="5" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="5" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="5" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="5" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="5" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-5">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="5" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="5" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-5" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-5" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-5">0%</div></td>
+  </tr><tr>
+    <td class="tn">Divisibility/Multiples/Factors</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="6" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="6" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="6" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="6" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="6" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="6" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="6" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-6">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="6" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="6" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-6" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-6" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-6">0%</div></td>
+  </tr><tr>
+    <td class="tn">Exponents/Powers</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="7" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="7" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="7" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="7" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="7" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="7" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="7" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-7">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="7" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="7" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-7" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-7" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-7">0%</div></td>
+  </tr><tr>
+    <td class="tn">Fractions/Ratios/Decimals</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="8" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="8" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="8" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="8" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="8" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="8" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="8" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-8">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="8" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="8" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-8" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-8" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-8">0%</div></td>
+  </tr><tr>
+    <td class="tn">Functions and Custom Characters</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="9" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="9" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="9" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="9" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="9" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="9" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="9" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-9">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="9" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="9" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-9" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-9" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-9">0%</div></td>
+  </tr><tr>
+    <td class="tn">Geometry</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="10" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="10" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="10" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="10" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="10" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="10" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="10" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-10">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="10" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="10" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-10" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-10" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-10">0%</div></td>
+  </tr><tr>
+    <td class="tn">Graphs and Illustrations</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="11" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="11" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="11" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="11" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="11" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="11" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="11" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-11">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="11" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="11" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-11" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-11" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-11">0%</div></td>
+  </tr><tr>
+    <td class="tn">Inequalities</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="12" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="12" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="12" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="12" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="12" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="12" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="12" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-12">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="12" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="12" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-12" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-12" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-12">0%</div></td>
+  </tr><tr>
+    <td class="tn">Min/Max Problems</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="13" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="13" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="13" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="13" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="13" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="13" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="13" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-13">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="13" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="13" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-13" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-13" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-13">0%</div></td>
+  </tr><tr>
+    <td class="tn">Mixture Problems</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="14" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="14" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="14" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="14" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="14" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="14" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="14" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-14">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="14" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="14" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-14" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-14" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-14">0%</div></td>
+  </tr><tr>
+    <td class="tn">Must or Could be True Questions</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="15" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="15" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="15" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="15" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="15" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="15" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="15" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-15">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="15" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="15" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-15" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-15" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-15">0%</div></td>
+  </tr><tr>
+    <td class="tn">Number Properties</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="16" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="16" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="16" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="16" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="16" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="16" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="16" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-16">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="16" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="16" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-16" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-16" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-16">0%</div></td>
+  </tr><tr>
+    <td class="tn">Percents and Interest Problems</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="17" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="17" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="17" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="17" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="17" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="17" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="17" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-17">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="17" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="17" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-17" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-17" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-17">0%</div></td>
+  </tr><tr>
+    <td class="tn">Roots</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="18" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="18" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="18" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="18" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="18" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="18" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="18" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-18">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="18" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="18" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-18" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-18" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-18">0%</div></td>
+  </tr><tr>
+    <td class="tn">Sequences</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="19" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="19" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="19" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="19" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="19" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="19" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="19" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-19">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="19" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="19" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-19" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-19" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-19">0%</div></td>
+  </tr><tr>
+    <td class="tn">Statistics and Sets Problems</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="20" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="20" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="20" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="20" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="20" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="20" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="20" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-20">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="20" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="20" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-20" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-20" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-20">0%</div></td>
+  </tr><tr>
+    <td class="tn">Word Problems</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="21" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="21" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="21" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="21" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="21" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="21" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="21" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-21">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="21" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="21" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-21" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-21" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-21">0%</div></td>
+  </tr><tr>
+    <td class="tn">Work/Rate Problems</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="22" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="22" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="22" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="22" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="22" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="22" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="QT" data-t="22" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-QT-22">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="22" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="QT" data-t="22" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-QT-22" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-QT-22" style="width:0%"></div></div>
+      <div class="pp" id="pp-QT-22">0%</div></td>
+  </tr></tbody>
+        <tfoot><tr>
+          <td class="tn">Column Total</td>
+          <td id="ct-QT-0">200</td><td id="ct-QT-1">0</td><td id="ct-QT-2">0</td><td id="ct-QT-3">0</td><td id="ct-QT-4">0</td><td id="ct-QT-5">0</td><td id="ct-QT-6">0</td>
+          <td id="gt-QT">200</td>
+          <td id="gc-QT" style="color:var(--success)">93</td>
+          <td id="gi-QT" style="color:var(--danger)">7</td>
+          <td id="ga-QT" style="color: var(--success);">93%</td>
+          <td></td>
+        </tr></tfoot>
+      </table></div></div><div class="panel" id="panel-DI">
+      <div class="sec-title">DI — Data Insights</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th class="tc">Topic</th>
+          <th class="th-d1">Sub-505</th><th class="th-d2">505–555</th><th class="th-d3">555–605</th><th class="th-d4">605–655</th><th class="th-d5">655–705</th><th class="th-d6">705–805</th><th class="th-d7">805+</th>
+          <th class="th-tot">Total</th>
+          <th class="th-cor">Correct</th>
+          <th class="th-inc">Incorrect</th>
+          <th class="th-acc">Accuracy</th>
+          <th class="th-prg">Progress</th>
+        </tr></thead>
+        <tbody><tr>
+    <td class="tn">DS</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="0" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="0" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="0" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="0" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="0" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="0" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="0" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-DI-0">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="DI" data-t="0" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="DI" data-t="0" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-DI-0" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-DI-0" style="width:0%"></div></div>
+      <div class="pp" id="pp-DI-0">0%</div></td>
+  </tr><tr>
+    <td class="tn">TPA</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="1" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="1" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="1" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="1" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="1" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="1" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="1" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-DI-1">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="DI" data-t="1" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="DI" data-t="1" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-DI-1" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-DI-1" style="width:0%"></div></div>
+      <div class="pp" id="pp-DI-1">0%</div></td>
+  </tr><tr>
+    <td class="tn">MSR</td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="2" data-d="0" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="2" data-d="1" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="2" data-d="2" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="2" data-d="3" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="2" data-d="4" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="2" data-d="5" onchange="onD(this)" oninput="onD(this)"></td><td class="dc"><input type="number" min="0" max="999" value="0" class="" data-s="DI" data-t="2" data-d="6" onchange="onD(this)" oninput="onD(this)"></td>
+    <td class="totc" id="rt-DI-2">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="0" data-s="DI" data-t="2" onchange="onC(this)" oninput="onC(this)"></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="0" data-s="DI" data-t="2" onchange="onI(this)" oninput="onI(this)"></td>
+    <td class="accc" id="ac-DI-2" style="color: var(--muted);">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-DI-2" style="width:0%"></div></div>
+      <div class="pp" id="pp-DI-2">0%</div></td>
+  </tr></tbody>
+        <tfoot><tr>
+          <td class="tn">Column Total</td>
+          <td id="ct-DI-0">0</td><td id="ct-DI-1">0</td><td id="ct-DI-2">0</td><td id="ct-DI-3">0</td><td id="ct-DI-4">0</td><td id="ct-DI-5">0</td><td id="ct-DI-6">0</td>
+          <td id="gt-DI">0</td>
+          <td id="gc-DI" style="color:var(--success)">0</td>
+          <td id="gi-DI" style="color:var(--danger)">0</td>
+          <td id="ga-DI" style="color:var(--warn)">—</td>
+          <td></td>
+        </tr></tfoot>
+      </table></div></div></div>
+  <div id="panel-SW" class="panel">
+    <div class="sec-title">Strengths &amp; Weaknesses Analysis</div>
+    <div class="sw-note">
+      <strong>How it works:</strong> Fill in <strong>Correct</strong> and <strong>Incorrect</strong> columns in each section tab.
+      This panel auto-updates instantly. &nbsp;|&nbsp; <strong style="color:var(--success)">≥ 70%</strong> = Strength &nbsp;
+      <strong style="color:var(--warn)">60–69%</strong> = Needs Work &nbsp; <strong style="color:var(--danger)">&lt; 60%</strong> = Weakness
+    </div>
+
+    <div class="sw-summary">
+      <h3>Section Accuracy Overview</h3>
+      <div class="sw-bars">
+        <div class="sw-br">
+            <span class="sw-bl">CR · Critical Reasoning</span>
+            <div class="sw-bt"><div class="sw-bf" style="width:0%;background:var(--muted)"></div></div>
+            <span class="sw-bp" style="color:var(--muted)">—</span>
+          </div><div class="sw-br">
+            <span class="sw-bl">RC · Reading Comprehension</span>
+            <div class="sw-bt"><div class="sw-bf" style="width:0%;background:var(--muted)"></div></div>
+            <span class="sw-bp" style="color:var(--muted)">—</span>
+          </div><div class="sw-br">
+            <span class="sw-bl">QT · Quants</span>
+            <div class="sw-bt"><div class="sw-bf" style="width:0%;background:var(--muted)"></div></div>
+            <span class="sw-bp" style="color:var(--muted)">—</span>
+          </div><div class="sw-br">
+            <span class="sw-bl">DI · Data Insights</span>
+            <div class="sw-bt"><div class="sw-bf" style="width:0%;background:var(--muted)"></div></div>
+            <span class="sw-bp" style="color:var(--muted)">—</span>
+          </div>
+      </div>
+    </div>
+
+    <div class="sw-grid">
+      <div class="sw-card">
+        <div class="sw-hd str"><span class="hd-dot" style="background:var(--success)"></span>Strengths ≥ 70%
+          <span style="margin-left:auto;font-size:10px;opacity:.7">0 topics</span></div>
+        <div class="sw-list">
+          <div class="sw-empty">No strengths yet.<br>Enter correct &amp; incorrect counts in any section tab.</div>
+        </div>
+      </div>
+      <div class="sw-card">
+        <div class="sw-hd wk"><span class="hd-dot" style="background:var(--danger)"></span>Weaknesses &lt; 60%
+          <span style="margin-left:auto;font-size:10px;opacity:.7">0 topics</span></div>
+        <div class="sw-list">
+          <div class="sw-empty">No weaknesses yet.<br>Enter correct &amp; incorrect counts in any section tab.</div>
+        </div>
+      </div>
+    </div>
+
+    
+
+    
+    <div class="sw-card">
+      <div class="sw-hd none"><span class="hd-dot" style="background:var(--muted)"></span>Not Yet Attempted
+        <span style="margin-left:auto;font-size:10px;opacity:.7">45 topics</span></div>
+      <div class="sw-tags"><span class="sw-tag">CR · Assumptions</span><span class="sw-tag">CR · Bold Face CR</span><span class="sw-tag">CR · Complete the Passage</span><span class="sw-tag">CR · Conclusion</span><span class="sw-tag">CR · Evaluate an Argument</span><span class="sw-tag">CR · Inference</span><span class="sw-tag">CR · Logical Flaw</span><span class="sw-tag">CR · Method of Reasoning</span><span class="sw-tag">CR · Must Be True</span><span class="sw-tag">CR · Resolve a Paradox</span><span class="sw-tag">CR · Similar Reasoning</span><span class="sw-tag">CR · Strengthen Argument</span><span class="sw-tag">CR · Weaken Argument</span><span class="sw-tag">RC · Humanities</span><span class="sw-tag">RC · Science</span><span class="sw-tag">RC · Business</span><span class="sw-tag">RC · Social Science</span><span class="sw-tag">RC · Long Passage</span><span class="sw-tag">RC · Short Passage</span><span class="sw-tag">QT · Absolute Values/Modules</span><span class="sw-tag">QT · Algebra</span><span class="sw-tag">QT · Arithmetic</span><span class="sw-tag">QT · Combinations</span><span class="sw-tag">QT · Coordinate Geometry</span><span class="sw-tag">QT · Distance/Rate Problems</span><span class="sw-tag">QT · Divisibility/Multiples/Factors</span><span class="sw-tag">QT · Exponents/Powers</span><span class="sw-tag">QT · Fractions/Ratios/Decimals</span><span class="sw-tag">QT · Functions and Custom Characters</span><span class="sw-tag">QT · Geometry</span><span class="sw-tag">QT · Graphs and Illustrations</span><span class="sw-tag">QT · Inequalities</span><span class="sw-tag">QT · Min/Max Problems</span><span class="sw-tag">QT · Mixture Problems</span><span class="sw-tag">QT · Must or Could be True Questions</span><span class="sw-tag">QT · Number Properties</span><span class="sw-tag">QT · Percents and Interest Problems</span><span class="sw-tag">QT · Roots</span><span class="sw-tag">QT · Sequences</span><span class="sw-tag">QT · Statistics and Sets Problems</span><span class="sw-tag">QT · Word Problems</span><span class="sw-tag">QT · Work/Rate Problems</span><span class="sw-tag">DI · DS</span><span class="sw-tag">DI · TPA</span><span class="sw-tag">DI · MSR</span></div>
+    </div>
+  </div>
+
+</div>
+<script>
+const DIFF=[
+  {label:'Sub-505',cls:'th-d1'},{label:'505–555',cls:'th-d2'},
+  {label:'555–605',cls:'th-d3'},{label:'605–655',cls:'th-d4'},
+  {label:'655–705',cls:'th-d5'},{label:'705–805',cls:'th-d6'},
+  {label:'805+',   cls:'th-d7'},
+];
+const SECTIONS={
+  CR:{full:'Critical Reasoning',topics:['Assumptions','Bold Face CR','Complete the Passage','Conclusion','Evaluate an Argument','Inference','Logical Flaw','Method of Reasoning','Must Be True','Resolve a Paradox','Similar Reasoning','Strengthen Argument','Weaken Argument']},
+  RC:{full:'Reading Comprehension',topics:['Humanities','Science','Business','Social Science','Long Passage','Short Passage']},
+  QT:{full:'Quants',topics:['Absolute Values/Modules','Algebra','Arithmetic','Combinations','Coordinate Geometry','Distance/Rate Problems','Divisibility/Multiples/Factors','Exponents/Powers','Fractions/Ratios/Decimals','Functions and Custom Characters','Geometry','Graphs and Illustrations','Inequalities','Min/Max Problems','Mixture Problems','Must or Could be True Questions','Number Properties','Percents and Interest Problems','Roots','Sequences','Statistics and Sets Problems','Word Problems','Work/Rate Problems']},
+  DI:{full:'Data Insights',topics:['DS','TPA','MSR']},
+};
+const TARGET=70;
+
+function sk(s,t,d){return `g2_${s}_${t}_d${d}`;}
+function skC(s,t){return `g2_${s}_${t}_c`;}
+function skI(s,t){return `g2_${s}_${t}_i`;}
+function lv(k){try{return parseInt(localStorage.getItem(k))||0;}catch{return 0;}}
+function sv(k,v){try{localStorage.setItem(k,v);}catch{}}
+
+function buildPanels(){
+  const c=document.getElementById('panels');
+  for(const [sec,data] of Object.entries(SECTIONS)){
+    const p=document.createElement('div');
+    p.className='panel'+(sec==='CR'?' active':'');
+    p.id=`panel-${sec}`;
+    p.innerHTML=`
+      <div class="sec-title">${sec} — ${data.full}</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th class="tc">Topic</th>
+          ${DIFF.map(d=>`<th class="${d.cls}">${d.label}</th>`).join('')}
+          <th class="th-tot">Total</th>
+          <th class="th-cor">Correct</th>
+          <th class="th-inc">Incorrect</th>
+          <th class="th-acc">Accuracy</th>
+          <th class="th-prg">Progress</th>
+        </tr></thead>
+        <tbody>${data.topics.map((t,ti)=>buildRow(sec,t,ti)).join('')}</tbody>
+        <tfoot><tr>
+          <td class="tn">Column Total</td>
+          ${DIFF.map((_,di)=>`<td id="ct-${sec}-${di}">0</td>`).join('')}
+          <td id="gt-${sec}">0</td>
+          <td id="gc-${sec}" style="color:var(--success)">0</td>
+          <td id="gi-${sec}" style="color:var(--danger)">0</td>
+          <td id="ga-${sec}" style="color:var(--warn)">—</td>
+          <td></td>
+        </tr></tfoot>
+      </table></div>`;
+    c.appendChild(p);
+  }
+}
+
+function buildRow(sec,topic,ti){
+  const diffs=DIFF.map((_,di)=>{
+    const v=lv(sk(sec,ti,di));
+    return `<td class="dc"><input type="number" min="0" max="999" value="${v}" class="${v>0?'hv':''}"
+      data-s="${sec}" data-t="${ti}" data-d="${di}" onchange="onD(this)" oninput="onD(this)"/></td>`;
+  }).join('');
+  const cor=lv(skC(sec,ti)),inc=lv(skI(sec,ti));
+  return `<tr>
+    <td class="tn">${topic}</td>${diffs}
+    <td class="totc" id="rt-${sec}-${ti}">0</td>
+    <td class="cc"><input type="number" min="0" max="99999" value="${cor}"
+      data-s="${sec}" data-t="${ti}" onchange="onC(this)" oninput="onC(this)"/></td>
+    <td class="ic"><input type="number" min="0" max="99999" value="${inc}"
+      data-s="${sec}" data-t="${ti}" onchange="onI(this)" oninput="onI(this)"/></td>
+    <td class="accc" id="ac-${sec}-${ti}">—</td>
+    <td class="prgc"><div class="pb"><div class="pf" id="pb-${sec}-${ti}" style="width:0%"></div></div>
+      <div class="pp" id="pp-${sec}-${ti}">0%</div></td>
+  </tr>`;
+}
+
+function onD(el){const{s:sec,t,d}=el.dataset;const v=Math.max(0,parseInt(el.value)||0);el.value=v;el.className=v>0?'hv':'';sv(sk(sec,+t,+d),v);go(sec);}
+function onC(el){const{s:sec,t}=el.dataset;const v=Math.max(0,parseInt(el.value)||0);el.value=v;sv(skC(sec,+t),v);go(sec);}
+function onI(el){const{s:sec,t}=el.dataset;const v=Math.max(0,parseInt(el.value)||0);el.value=v;sv(skI(sec,+t),v);go(sec);}
+
+function gD(s,t,d){const e=document.querySelector(`input[data-s="${s}"][data-t="${t}"][data-d="${d}"]`);return e?parseInt(e.value)||0:0;}
+function gC(s,t){const e=document.querySelector(`td.cc input[data-s="${s}"][data-t="${t}"]`);return e?parseInt(e.value)||0:0;}
+function gI(s,t){const e=document.querySelector(`td.ic input[data-s="${s}"][data-t="${t}"]`);return e?parseInt(e.value)||0:0;}
+
+function accClr(p){return p>=80?'var(--success)':p>=60?'var(--warn)':'var(--danger)';}
+
+function go(sec){
+  updateSection(sec);updateGlobal();
+  const sw=document.getElementById('panel-SW');
+  if(sw.classList.contains('active'))renderSW();
+}
+
+function updateSection(sec){
+  const topics=SECTIONS[sec].topics;
+  const ct=new Array(7).fill(0);
+  let sT=0,sC=0,sI=0;
+  topics.forEach((_,ti)=>{
+    let r=0;DIFF.forEach((__,di)=>{const v=gD(sec,ti,di);r+=v;ct[di]+=v;});sT+=r;
+    const c=gC(sec,ti),i=gI(sec,ti);sC+=c;sI+=i;
+    const rt=document.getElementById(`rt-${sec}-${ti}`);if(rt)rt.textContent=r;
+    const pct=Math.min(100,Math.round((r/TARGET)*100));
+    const pb=document.getElementById(`pb-${sec}-${ti}`);if(pb)pb.style.width=pct+'%';
+    const pp=document.getElementById(`pp-${sec}-${ti}`);if(pp)pp.textContent=pct+'%';
+    const ac=document.getElementById(`ac-${sec}-${ti}`);
+    if(ac){const tot=c+i;if(tot>0){const a=Math.round((c/tot)*100);ac.textContent=a+'%';ac.style.color=accClr(a);}else{ac.textContent='—';ac.style.color='var(--muted)';}}
+  });
+  DIFF.forEach((_,di)=>{const e=document.getElementById(`ct-${sec}-${di}`);if(e)e.textContent=ct[di];});
+  const gt=document.getElementById(`gt-${sec}`);if(gt)gt.textContent=sT;
+  const gc=document.getElementById(`gc-${sec}`);if(gc)gc.textContent=sC;
+  const gi=document.getElementById(`gi-${sec}`);if(gi)gi.textContent=sI;
+  const ga=document.getElementById(`ga-${sec}`);
+  if(ga){const tot=sC+sI;if(tot>0){const a=Math.round((sC/tot)*100);ga.textContent=a+'%';ga.style.color=accClr(a);}else ga.textContent='—';}
+}
+
+function updateGlobal(){
+  let tot=0,cor=0,inc=0,started=0;
+  const allT=Object.values(SECTIONS).reduce((s,d)=>s+d.topics.length,0);
+  for(const [sec,data] of Object.entries(SECTIONS)){
+    data.topics.forEach((_,ti)=>{
+      let r=0;DIFF.forEach((__,di)=>r+=gD(sec,ti,di));tot+=r;
+      const c=gC(sec,ti),i=gI(sec,ti);cor+=c;inc+=i;
+      if(r>0||c>0||i>0)started++;
+    });
+  }
+  const pct=Math.min(100,Math.round((tot/(allT*TARGET))*100));
+  const acc=cor+inc>0?Math.round((cor/(cor+inc))*100):null;
+  document.getElementById('k-att').textContent=tot;
+  document.getElementById('k-cor').textContent=cor;
+  document.getElementById('k-acc').textContent=acc!==null?acc+'%':'—';
+  document.getElementById('k-top').textContent=started;
+  document.getElementById('ob-fill').style.width=pct+'%';
+  document.getElementById('ob-pct').textContent=pct+'%';
+}
+
+function renderSW(){
+  const sw=document.getElementById('panel-SW');
+  const all=[];
+  for(const [sec,data] of Object.entries(SECTIONS)){
+    data.topics.forEach((topic,ti)=>{
+      let att=0;DIFF.forEach((_,di)=>att+=gD(sec,ti,di));
+      const cor=gC(sec,ti),inc=gI(sec,ti),total=cor+inc;
+      const acc=total>0?Math.round((cor/total)*100):null;
+      all.push({sec,secFull:data.full,topic,att,cor,inc,total,acc});
+    });
+  }
+  const withAcc=all.filter(x=>x.acc!==null).sort((a,b)=>b.acc-a.acc);
+  const strengths=withAcc.filter(x=>x.acc>=70);
+  const medium=withAcc.filter(x=>x.acc>=60&&x.acc<70);
+  const weak=withAcc.filter(x=>x.acc<60).reverse();
+  const none=all.filter(x=>x.att===0&&x.total===0);
+
+  const secStats={};
+  for(const [sec,data] of Object.entries(SECTIONS)){
+    let c=0,i=0,a=0;
+    data.topics.forEach((_,ti)=>{c+=gC(sec,ti);i+=gI(sec,ti);DIFF.forEach((__,di)=>a+=gD(sec,ti,di));});
+    secStats[sec]={cor:c,inc:i,att:a,full:data.full};
+  }
+
+  function itemHtml(x,cls){
+    return `<div class="sw-item">
+      <div class="si-l"><span class="si-name">${x.topic}</span><span class="si-sec">${x.sec} · ${x.secFull}</span></div>
+      <div class="si-r"><span class="si-cnt">${x.cor}/${x.total}</span><span class="si-badge ${cls}">${x.acc}%</span></div>
+    </div>`;
+  }
+
+  sw.innerHTML=`
+    <div class="sec-title">Strengths &amp; Weaknesses Analysis</div>
+    <div class="sw-note">
+      <strong>How it works:</strong> Fill in <strong>Correct</strong> and <strong>Incorrect</strong> columns in each section tab.
+      This panel auto-updates instantly. &nbsp;|&nbsp; <strong style="color:var(--success)">≥ 70%</strong> = Strength &nbsp;
+      <strong style="color:var(--warn)">60–69%</strong> = Needs Work &nbsp; <strong style="color:var(--danger)">&lt; 60%</strong> = Weakness
+    </div>
+
+    <div class="sw-summary">
+      <h3>Section Accuracy Overview</h3>
+      <div class="sw-bars">
+        ${Object.entries(secStats).map(([sec,s])=>{
+          const tot=s.cor+s.inc;const pct=tot>0?Math.round((s.cor/tot)*100):null;
+          const clr=pct===null?'var(--muted)':pct>=70?'var(--success)':pct>=60?'var(--warn)':'var(--danger)';
+          return `<div class="sw-br">
+            <span class="sw-bl">${sec} · ${s.full}</span>
+            <div class="sw-bt"><div class="sw-bf" style="width:${pct||0}%;background:${clr}"></div></div>
+            <span class="sw-bp" style="color:${clr}">${pct!==null?pct+'%':'—'}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="sw-grid">
+      <div class="sw-card">
+        <div class="sw-hd str"><span class="hd-dot" style="background:var(--success)"></span>Strengths ≥ 70%
+          <span style="margin-left:auto;font-size:10px;opacity:.7">${strengths.length} topics</span></div>
+        <div class="sw-list">
+          ${strengths.length===0
+            ?'<div class="sw-empty">No strengths yet.<br>Enter correct &amp; incorrect counts in any section tab.</div>'
+            :strengths.map(x=>itemHtml(x,'str')).join('')}
+        </div>
+      </div>
+      <div class="sw-card">
+        <div class="sw-hd wk"><span class="hd-dot" style="background:var(--danger)"></span>Weaknesses &lt; 60%
+          <span style="margin-left:auto;font-size:10px;opacity:.7">${weak.length} topics</span></div>
+        <div class="sw-list">
+          ${weak.length===0
+            ?'<div class="sw-empty">No weaknesses yet.<br>Enter correct &amp; incorrect counts in any section tab.</div>'
+            :weak.map(x=>itemHtml(x,'wk')).join('')}
+        </div>
+      </div>
+    </div>
+
+    ${medium.length>0?`
+    <div class="sw-card" style="margin-bottom:16px">
+      <div class="sw-hd med"><span class="hd-dot" style="background:var(--warn)"></span>Needs Work 60–69%
+        <span style="margin-left:auto;font-size:10px;opacity:.7">${medium.length} topics</span></div>
+      <div class="sw-list">${medium.map(x=>itemHtml(x,'med')).join('')}</div>
+    </div>`:''}
+
+    ${none.length>0?`
+    <div class="sw-card">
+      <div class="sw-hd none"><span class="hd-dot" style="background:var(--muted)"></span>Not Yet Attempted
+        <span style="margin-left:auto;font-size:10px;opacity:.7">${none.length} topics</span></div>
+      <div class="sw-tags">${none.map(x=>`<span class="sw-tag">${x.sec} · ${x.topic}</span>`).join('')}</div>
+    </div>`:''}
+  `;
+}
+
+function switchTab(sec,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`panel-${sec}`).classList.add('active');
+  if(sec==='SW')renderSW();
+}
+
+// Init
+buildPanels();
+document.querySelectorAll('td.dc input').forEach(i=>{if(parseInt(i.value)>0)i.className='hv';});
+for(const sec of Object.keys(SECTIONS))updateSection(sec);
+updateGlobal();
+</script>
+
+
+</body></html>
