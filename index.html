@@ -200,6 +200,68 @@ tfoot td.tn{text-align:left;padding-left:16px;font-size:10px;text-transform:uppe
 /* Diff breakdown in SW */
 .diff-breakdown{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;}
 .diff-pip{font-size:9px;font-family:'Space Mono',monospace;padding:2px 5px;border-radius:4px;font-weight:700;}
+
+/* ── Daily Tracker ── */
+.dt-hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px;}
+.dt-hero-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;}
+.dh-label{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:5px;}
+.dh-val{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;line-height:1;}
+.dh-sub{font-size:10px;color:var(--muted);margin-top:3px;}
+.dt-quota-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:18px;}
+.dt-quota-bar h3{font-family:'Space Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;}
+.dq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;}
+.dq-item{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;}
+.dq-name{font-size:11px;color:var(--text2);margin-bottom:5px;}
+.dq-nums{display:flex;align-items:baseline;gap:4px;}
+.dq-done{font-family:'Space Mono',monospace;font-size:17px;font-weight:700;}
+.dq-quota{font-size:11px;color:var(--muted);}
+.dq-bar{height:4px;border-radius:2px;background:var(--border);margin-top:5px;overflow:hidden;}
+.dq-fill{height:100%;border-radius:2px;transition:width .4s;}
+.dq-status{font-size:9px;margin-top:3px;font-family:'Space Mono',monospace;}
+.dt-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.3);overflow-x:auto;margin-bottom:16px;}
+.dt-table{width:100%;border-collapse:collapse;min-width:820px;}
+.dt-table thead th{padding:10px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap;}
+.dt-table th.dtc-date{text-align:left;padding-left:14px;color:var(--muted);min-width:100px;}
+.dt-table th.dtc-v{color:#a78bfa;background:rgba(167,139,250,.08);}
+.dt-table th.dtc-q{color:var(--d3);background:var(--d3b);}
+.dt-table th.dtc-di{color:var(--accent);background:rgba(59,130,246,.08);}
+.dt-table th.dtc-tot{color:var(--text2);background:rgba(255,255,255,.03);}
+.dt-table tbody tr{transition:background .12s;}
+.dt-table tbody tr:hover{background:rgba(255,255,255,.02);}
+.dt-table tbody tr:not(:last-child) td{border-bottom:1px solid rgba(255,255,255,.03);}
+.dt-table td{padding:0;text-align:center;vertical-align:middle;}
+.dtc-date{text-align:left !important;padding:0 8px 0 14px !important;}
+.dt-date-inner{display:flex;flex-direction:column;gap:1px;padding:7px 0;}
+.dt-day{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--text);}
+.dt-wd{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;}
+.today-badge{display:inline-block;font-size:8px;background:var(--accent);color:#fff;border-radius:3px;padding:1px 5px;font-weight:700;margin-top:2px;}
+tr.is-today{background:rgba(59,130,246,.05) !important;}
+tr.is-today td{border-top:1px solid rgba(59,130,246,.18) !important;border-bottom:1px solid rgba(59,130,246,.18) !important;}
+tr.is-past .dt-day{color:var(--text2);}
+.dt-ic{padding:3px 2px;min-width:64px;}
+.dt-iw{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.dt-i{width:50px;height:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:5px;outline:none;color:var(--text2);font-family:'Space Mono',monospace;font-size:11px;text-align:center;cursor:pointer;-moz-appearance:textfield;transition:border-color .15s,color .15s;}
+.dt-i::-webkit-inner-spin-button,.dt-i::-webkit-outer-spin-button{-webkit-appearance:none;}
+.dt-i:focus{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.07);}
+.dt-i.met{color:var(--success);border-color:rgba(16,185,129,.3);font-weight:700;}
+.dt-i.over{color:#34d399;border-color:rgba(16,185,129,.45);font-weight:700;}
+.dt-i.partial{color:var(--warn);border-color:rgba(245,158,11,.3);}
+.dt-i.miss{color:var(--danger);border-color:rgba(239,68,68,.2);}
+.dt-ql{font-size:8px;color:var(--muted);font-family:'Space Mono',monospace;}
+.dt-tot-cell{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--text2);padding:0 6px;}
+.dt-st-cell{padding:0 6px;min-width:78px;}
+.dt-badge{font-size:9px;font-family:'Space Mono',monospace;font-weight:700;padding:3px 7px;border-radius:5px;white-space:nowrap;}
+.dt-badge.complete{background:rgba(16,185,129,.15);color:var(--success);}
+.dt-badge.partial{background:rgba(245,158,11,.12);color:var(--warn);}
+.dt-badge.missed{background:rgba(239,68,68,.12);color:var(--danger);}
+.dt-badge.future{background:rgba(75,98,128,.1);color:var(--muted);}
+.dt-badge.today{background:rgba(59,130,246,.15);color:var(--accent);}
+.dt-def-cell{padding:0 6px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;}
+.dt-table tfoot td{padding:10px 6px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--accent2);background:rgba(99,102,241,.07);border-top:1px solid var(--border);text-align:center;}
+.dt-table tfoot td.dtc-date{text-align:left;padding-left:14px;font-size:10px;text-transform:uppercase;color:var(--muted);}
+.tab.dt-tab.active{background:linear-gradient(135deg,#7c3aed,#5b21b6);box-shadow:0 4px 14px rgba(124,58,237,.25);}
+.dt-deficit-note{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--text2);line-height:1.7;}
+.dt-deficit-note strong{color:var(--danger);}
 </style>
 </head>
 <body>
@@ -252,10 +314,12 @@ tfoot td.tn{text-align:left;padding-left:16px;font-size:10px;text-transform:uppe
   <button class="tab"        onclick="switchTab('QT',this)">Quants</button>
   <button class="tab"        onclick="switchTab('DI',this)">DI · Data Insights</button>
   <button class="tab sw-tab" onclick="switchTab('SW',this)">⚡ Strengths &amp; Weaknesses</button>
+  <button class="tab dt-tab" onclick="switchTab('DT',this)">📅 Daily Tracker</button>
 </div>
 
 <div id="panels"></div>
 <div id="panel-SW" class="panel"></div>
+<div id="panel-DT" class="panel"></div>
 
 </div>
 <script>
@@ -647,6 +711,240 @@ function switchTab(sec,btn){
   btn.classList.add('active');
   document.getElementById(`panel-${sec}`).classList.add('active');
   if(sec==='SW')renderSW();
+  if(sec==='DT')renderDT();
+}
+
+// ── Daily Tracker ─────────────────────────────────────────────────────────────
+const QUOTAS={RC:5,CR:25,QT:25,MSR:10,TPA:10,DS:8};
+const QUOTA_TOTAL=Object.values(QUOTAS).reduce((a,b)=>a+b,0); // 83
+const DT_START=new Date('2026-03-15');
+const DT_END  =new Date('2026-04-15');
+
+function dtDates(){
+  const dates=[];
+  for(let d=new Date(DT_START);d<=DT_END;d.setDate(d.getDate()+1))
+    dates.push(new Date(d));
+  return dates;
+}
+function dtKey(date,cat){
+  return `dt_${date.toISOString().slice(0,10)}_${cat}`;
+}
+function dtGet(date,cat){return lv(dtKey(date,cat));}
+function dtSet(date,cat,v){sv(dtKey(date,cat),v);}
+
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function isToday(d){return d.toISOString().slice(0,10)===todayStr();}
+function isPast(d){return d<new Date(new Date().setHours(0,0,0,0));}
+
+const WEEKDAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function dtInputClass(done,quota){
+  if(done===0)return '';
+  if(done>=quota*1.1)return 'over';
+  if(done>=quota)return 'met';
+  if(done>0)return 'partial';
+  return 'miss';
+}
+
+function renderDT(){
+  const panel=document.getElementById('panel-DT');
+  const dates=dtDates();
+  const today=new Date(new Date().setHours(0,0,0,0));
+
+  // Compute summary stats
+  let totalDeficit=0, daysComplete=0, daysMissed=0, totalDone=0;
+  const catDeficit={RC:0,CR:0,QT:0,MSR:0,TPA:0,DS:0};
+  const todayDate=dates.find(d=>isToday(d));
+
+  dates.forEach(d=>{
+    if(!isPast(d)&&!isToday(d))return;
+    let dayComplete=true;
+    Object.keys(QUOTAS).forEach(cat=>{
+      const done=dtGet(d,cat);
+      const def=Math.max(0,QUOTAS[cat]-done);
+      catDeficit[cat]+=def;
+      totalDeficit+=def;
+      totalDone+=done;
+      if(done<QUOTAS[cat])dayComplete=false;
+    });
+    if(dayComplete)daysComplete++;
+    else if(isPast(d))daysMissed++;
+  });
+
+  // Today's totals
+  const todayDone={};let todayTotal=0;
+  Object.keys(QUOTAS).forEach(cat=>{
+    todayDone[cat]=todayDate?dtGet(todayDate,cat):0;
+    todayTotal+=todayDone[cat];
+  });
+
+  const daysElapsed=dates.filter(d=>isPast(d)||isToday(d)).length;
+  const daysLeft=dates.filter(d=>!isPast(d)&&!isToday(d)).length+1;
+
+  // Hero cards
+  const heroHTML=`
+    <div class="dt-hero">
+      <div class="dt-hero-card">
+        <div class="dh-label">Today's Progress</div>
+        <div class="dh-val" style="color:${todayTotal>=QUOTA_TOTAL?'var(--success)':'var(--warn)'}">${todayTotal}<span style="font-size:12px;color:var(--muted)">/${QUOTA_TOTAL}</span></div>
+        <div class="dh-sub">${todayTotal>=QUOTA_TOTAL?'✓ Quota met!':QUOTA_TOTAL-todayTotal+' left today'}</div>
+      </div>
+      <div class="dt-hero-card">
+        <div class="dh-label">Days Complete</div>
+        <div class="dh-val" style="color:var(--success)">${daysComplete}</div>
+        <div class="dh-sub">of ${daysElapsed} elapsed</div>
+      </div>
+      <div class="dt-hero-card">
+        <div class="dh-label">Cumul. Deficit</div>
+        <div class="dh-val" style="color:${totalDeficit===0?'var(--success)':'var(--danger)'}">${totalDeficit}</div>
+        <div class="dh-sub">questions missed</div>
+      </div>
+      <div class="dt-hero-card">
+        <div class="dh-label">Days Remaining</div>
+        <div class="dh-val" style="color:var(--accent2)">${daysLeft}</div>
+        <div class="dh-sub">until Apr 15</div>
+      </div>
+      <div class="dt-hero-card">
+        <div class="dh-label">Total Done</div>
+        <div class="dh-val" style="color:var(--accent)">${totalDone}</div>
+        <div class="dh-sub">across all days</div>
+      </div>
+    </div>`;
+
+  // Today's quota progress bars
+  const quotaHTML=`
+    <div class="dt-quota-bar">
+      <h3>Today's Quota Status</h3>
+      <div class="dq-grid">
+        ${Object.entries(QUOTAS).map(([cat,q])=>{
+          const done=todayDone[cat]||0;
+          const pct=Math.min(100,Math.round((done/q)*100));
+          const clr=done>=q?'var(--success)':done>0?'var(--warn)':'var(--muted)';
+          const label={RC:'RC · Reading',CR:'CR · Critical',QT:'Quants',MSR:'DI · MSR',TPA:'DI · TPA',DS:'DI · DS'}[cat];
+          return `<div class="dq-item">
+            <div class="dq-name">${label}</div>
+            <div class="dq-nums">
+              <span class="dq-done" style="color:${clr}">${done}</span>
+              <span class="dq-quota">/ ${q}</span>
+            </div>
+            <div class="dq-bar"><div class="dq-fill" style="width:${pct}%;background:${clr}"></div></div>
+            <div class="dq-status" style="color:${clr}">${done>=q?'✓ Done':done>0?'+'+( q-done)+' to go':'Not started'}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+
+  // Deficit note
+  const defHTML = totalDeficit>0 ? `
+    <div class="dt-deficit-note">
+      <strong>⚠ Cumulative Deficit: ${totalDeficit} questions</strong> — You can cover these on any future day by doing extra questions.
+      Breakdown: ${Object.entries(catDeficit).filter(([,v])=>v>0).map(([k,v])=>`<strong>${k}: ${v}</strong>`).join(' · ')}
+    </div>` : '';
+
+  // Main table
+  const cats=Object.keys(QUOTAS);
+  const tableHTML=`
+    <div class="dt-wrap">
+      <table class="dt-table">
+        <thead>
+          <tr>
+            <th class="dtc-date" rowspan="2">Date</th>
+            <th class="dtc-v" colspan="2">Verbal</th>
+            <th class="dtc-q" colspan="1">Quants</th>
+            <th class="dtc-di" colspan="3">DI</th>
+            <th class="dtc-tot" rowspan="2">Total</th>
+            <th rowspan="2" style="color:var(--muted)">Status</th>
+            <th rowspan="2" style="color:var(--muted)">Deficit</th>
+          </tr>
+          <tr>
+            <th class="dtc-v">RC<br><span style="opacity:.5;font-size:8px">q:${QUOTAS.RC}</span></th>
+            <th class="dtc-v">CR<br><span style="opacity:.5;font-size:8px">q:${QUOTAS.CR}</span></th>
+            <th class="dtc-q">QT<br><span style="opacity:.5;font-size:8px">q:${QUOTAS.QT}</span></th>
+            <th class="dtc-di">MSR<br><span style="opacity:.5;font-size:8px">q:${QUOTAS.MSR}</span></th>
+            <th class="dtc-di">TPA<br><span style="opacity:.5;font-size:8px">q:${QUOTAS.TPA}</span></th>
+            <th class="dtc-di">DS<br><span style="opacity:.5;font-size:8px">q:${QUOTAS.DS}</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${dates.map(date=>{
+            const dStr=date.toISOString().slice(0,10);
+            const isTod=isToday(date);
+            const isPas=isPast(date)&&!isTod;
+            const isFut=!isPast(date)&&!isTod;
+            const rowClass=isTod?'is-today':isPas?'is-past':'is-future';
+
+            let dayTotal=0,dayDeficit=0;
+            const inputs=cats.map(cat=>{
+              const done=dtGet(date,cat);
+              dayTotal+=done;
+              const def=Math.max(0,QUOTAS[cat]-done);
+              if(!isFut)dayDeficit+=def;
+              const cls=isFut?'':(done===0&&!isTod?'miss':dtInputClass(done,QUOTAS[cat]));
+              return `<td class="dt-ic">
+                <div class="dt-iw">
+                  <input class="dt-i ${cls}" type="number" min="0" max="999" value="${done}"
+                    data-date="${dStr}" data-cat="${cat}"
+                    onchange="dtChange(this)" oninput="dtChange(this)"/>
+                </div>
+              </td>`;
+            }).join('');
+
+            const totClr=dayTotal>=QUOTA_TOTAL?'var(--success)':dayTotal>0?'var(--warn)':'var(--muted)';
+            let badge='';
+            if(isTod)badge='<span class="dt-badge today">TODAY</span>';
+            else if(isFut)badge='<span class="dt-badge future">—</span>';
+            else if(dayTotal>=QUOTA_TOTAL)badge='<span class="dt-badge complete">✓ Done</span>';
+            else if(dayTotal>0)badge='<span class="dt-badge partial">Partial</span>';
+            else badge='<span class="dt-badge missed">Missed</span>';
+
+            const defClr=dayDeficit===0?'var(--success)':dayDeficit>0?'var(--danger)':'var(--muted)';
+
+            return `<tr class="${rowClass}">
+              <td class="dtc-date">
+                <div class="dt-date-inner">
+                  <span class="dt-day">${date.getDate()} ${MONTHS[date.getMonth()]}</span>
+                  <span class="dt-wd">${WEEKDAYS[date.getDay()]}</span>
+                  ${isTod?'<span class="today-badge">TODAY</span>':''}
+                </div>
+              </td>
+              ${inputs}
+              <td class="dt-tot-cell" style="color:${totClr}">${dayTotal||'—'}</td>
+              <td class="dt-st-cell">${badge}</td>
+              <td class="dt-def-cell" style="color:${isFut?'var(--muted)':defClr}">${isFut?'—':dayDeficit===0?'✓':'-'+dayDeficit}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="dtc-date">Total</td>
+            ${cats.map(cat=>{
+              const tot=dates.reduce((s,d)=>s+dtGet(d,cat),0);
+              const quota=QUOTAS[cat]*dates.length;
+              return `<td style="color:${tot>=quota?'var(--success)':'var(--accent2)'}">${tot}</td>`;
+            }).join('')}
+            <td>${dates.reduce((s,d)=>s+cats.reduce((cs,cat)=>cs+dtGet(d,cat),0),0)}</td>
+            <td></td>
+            <td style="color:${totalDeficit===0?'var(--success)':'var(--danger)'}">-${totalDeficit}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>`;
+
+  panel.innerHTML=`<div class="sec-title">📅 Daily Question Tracker — Mar 15 → Apr 15</div>${heroHTML}${quotaHTML}${defHTML}${tableHTML}`;
+}
+
+function dtChange(el){
+  const{date,cat}=el.dataset;
+  const v=Math.max(0,parseInt(el.value)||0);
+  el.value=v;
+  const d=new Date(date);
+  dtSet(d,cat,v);
+  // Update input colour class
+  const cls=dtInputClass(v,QUOTAS[cat]);
+  el.className=`dt-i ${cls}`;
+  // Re-render hero + quota bars only (avoid full rebuild while typing)
+  renderDT();
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
